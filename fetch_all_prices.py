@@ -9,6 +9,10 @@ from datetime import datetime, timedelta, timezone
 
 # Konfiguration: Filnamn (utan .json) -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
 ZONES = {
+    # Tyskland (EUR)
+    "DE":  ("DE", "EUR", "10Y1001A1001A82H"),
+    # Luxemburg (EUR) - egen förfrågan mot DE-LU
+    "LU":  ("LU", "EUR", "10Y1001A1001A82H"),
     # Sverige (SEK)
     "SE1": ("SE", "SEK", "10Y1001A1001A44P"),
     "SE2": ("SE", "SEK", "10Y1001A1001A45N"),
