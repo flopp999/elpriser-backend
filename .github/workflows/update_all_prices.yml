@@ -1,15 +1,15 @@
-name: Uppdatera tyska elpriser
+name: Uppdatera europeiska elpriser (lokal valuta)
 
 on:
   schedule:
-    # Körs kl. 12:30 UTC varje dag (= 13:30 vintertid / 14:30 sommartid i Sverige & Tyskland)
-    - cron: '30 12 * * *'
-    # Extra reservkörning 1 timme senare ifall ENTSO-E skulle vara försenat någon dag
-    - cron: '30 13 * * *'
-  workflow_dispatch: # Gör att du kan klicka "Run workflow" manuellt för att testa direkt
+    # Körs kl. 12:40 UTC varje dag (= 13:40 vintertid / 14:40 sommartid)
+    - cron: '40 12 * * *'
+    # Reservkörning 1 timme senare ifall någon börs är försenad
+    - cron: '40 13 * * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write # Krävs för att GitHub Actions ska få spara prices.json i repot
+  contents: write
 
 jobs:
   fetch-and-commit:
@@ -24,15 +24,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Hämta elpriser och bygg JSON
+      - name: Hämta elpriser för samtliga länder och bygg JSON-filer
         env:
           ENTSOE_TOKEN: ${{ secrets.ENTSOE_TOKEN }}
-        run: python fetch_prices.py
+        run: python fetch_all_prices.py
 
-      - name: Spara uppdaterad prices.json till GitHub
+      - name: Spara uppdaterade JSON-filer till GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add prices.json
+          git add *.json
           git diff --staged --quiet || git commit -m "Uppdatera elpriser $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase
           git push
