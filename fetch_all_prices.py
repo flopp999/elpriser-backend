@@ -7,12 +7,8 @@ import urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
-# Konfiguration: Filnamn (utan .json) -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
+# Konfiguration: Katalog/Område -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
 ZONES = {
-    # Tyskland (EUR)
-    "DE":  ("DE", "EUR", "10Y1001A1001A82H"),
-    # Luxemburg (EUR) - egen förfrågan mot DE-LU
-    "LU":  ("LU", "EUR", "10Y1001A1001A82H"),
     # Sverige (SEK)
     "SE1": ("SE", "SEK", "10Y1001A1001A44P"),
     "SE2": ("SE", "SEK", "10Y1001A1001A45N"),
@@ -32,6 +28,9 @@ ZONES = {
     "EE":  ("EE", "EUR", "10Y1001A1001A39I"),
     "LV":  ("LV", "EUR", "10YLV-1001A00074"),
     "LT":  ("LT", "EUR", "10YLT-1001A0008Q"),
+    # Tyskland & Luxemburg (EUR)
+    "DE":  ("DE", "EUR", "10Y1001A1001A82H"),
+    "LU":  ("LU", "EUR", "10Y1001A1001A82H"),
     # Nederländerna (EUR)
     "NL":  ("NL", "EUR", "10YNL----------L"),
     # Storbritannien (GBP)
@@ -45,7 +44,6 @@ ZONES = {
     "PT":  ("PT", "EUR", "10YPT-REN------W"),
 }
 
-# Reservkurser (1 EUR = X lokal valuta) om valutakurs-API:et tillfälligt inte svarar
 FALLBACK_RATES_FROM_EUR = {
     "EUR": 1.0,
     "SEK": 11.40,
@@ -82,8 +80,7 @@ def convert_currency(amount: float, from_curr: str, to_curr: str, eur_rates: dic
         return amount
     if from_curr not in eur_rates or to_curr not in eur_rates:
         raise ValueError(f"Saknar växelkurs för konvertering {from_curr} -> {to_curr}")
-    amount_in_eur = amount / eur_rates[from_curr]
-    return amount_in_eur * eur_rates[to_curr]
+    return (amount / eur_rates[from_curr]) * eur_rates[to_curr]
 
 
 def parse_entsoe_xml(xml_data: str, target_currency: str, eur_rates: dict[str, float]) -> list[dict]:
@@ -154,8 +151,9 @@ def parse_entsoe_xml(xml_data: str, target_currency: str, eur_rates: dict[str, f
 def fetch_zone_prices(token: str, eic_code: str, target_currency: str, eur_rates: dict[str, float]) -> list[dict]:
     """Hämtar day-ahead-priser för ett elområde från ENTSO-E."""
     now_utc = datetime.now(timezone.utc)
-    period_start = (now_utc - timedelta(days=1)).replace(hour=22, minute=0, second=0, microsecond=0)
-    period_end = (now_utc + timedelta(days=2)).replace(hour=23, minute=0, second=0, microsecond=0)
+    # Hämta från 00:00 UTC idag till 23:00 UTC imorgon
+    period_start = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
+    period_end = (now_utc + timedelta(days=2)).replace(hour=0, minute=0, second=0, microsecond=0)
 
     params = {
         "documentType": "A44",
@@ -181,48 +179,75 @@ def main():
         raise RuntimeError("Miljövariabeln ENTSOE_TOKEN saknas!")
 
     eur_rates = get_eur_exchange_rates()
-    updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    now_utc = datetime.now(timezone.utc)
+    updated_at = now_utc.isoformat().replace("+00:00", "Z")
+    today_utc = now_utc.date()
+    valid_dates = {today_utc, today_utc + timedelta(days=1)}
+
     success_count = 0
 
-    for file_prefix, (country_code, currency, eic_code) in ZONES.items():
-        output_file = f"{file_prefix}.json"
-        print(f"Hämtar {file_prefix} ({country_code}, {currency})...")
+    for zone_dir, (country_code, currency, eic_code) in ZONES.items():
+        print(f"Hämtar {zone_dir} ({country_code}, {currency})...")
 
         try:
             prices = fetch_zone_prices(token, eic_code, currency, eur_rates)
             if not prices:
-                print(f"Varning: Inga priser hittades för {file_prefix}.")
+                print(f"Varning: Inga priser hittades för {zone_dir}.")
                 continue
 
-            payload = {
-                "zone": file_prefix,
-                "country": country_code,
-                "currency": currency,
-                "unit": "kWh",
-                "exchange_rate_eur": eur_rates.get(currency, 1.0),
-                "source": "ENTSO-E Transparency Platform",
-                "updated_at": updated_at,
-                "count": len(prices),
-                "prices": prices,
-            }
+            # Gruppera intervallen per UTC-datum (YYYY-MM-DD)
+            prices_by_day: dict[datetime.date, list[dict]] = {}
+            for item in prices:
+                slot_utc = datetime.fromisoformat(item["start"].replace("Z", "+00:00"))
+                if slot_utc.date() in valid_dates:
+                    prices_by_day.setdefault(slot_utc.date(), []).append(item)
 
-            with open(output_file, "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
+            if not prices_by_day:
+                print(f"Varning: Inga giltiga dagpriser för {zone_dir}.")
+                continue
 
-            print(f"-> Sparade {len(prices)} intervall till {output_file}")
+            for day_date, day_prices in sorted(prices_by_day.items()):
+                year_str = day_date.strftime("%Y")
+                month_str = day_date.strftime("%m")
+                date_str = day_date.strftime("%Y-%m-%d")
+
+                # Skapa katalogstruktur: OMRÅDE/ÅR/MÅNAD/ÅÅÅÅ-MM-DD.json
+                dir_path = os.path.join(zone_dir, year_str, month_str)
+                os.makedirs(dir_path, exist_ok=True)
+                output_file = os.path.join(dir_path, f"{date_str}.json")
+
+                payload = {
+                    "zone": zone_dir,
+                    "country": country_code,
+                    "date": date_str,
+                    "timezone": "UTC",
+                    "currency": currency,
+                    "unit": "kWh",
+                    "exchange_rate_eur": eur_rates.get(currency, 1.0),
+                    "source": "ENTSO-E Transparency Platform",
+                    "updated_at": updated_at,
+                    "count": len(day_prices),
+                    "prices": day_prices,
+                }
+
+                with open(output_file, "w", encoding="utf-8") as f:
+                    json.dump(payload, f, indent=2, ensure_ascii=False)
+
+                print(f"-> Sparade {len(day_prices)} intervall till {output_file}")
+
             success_count += 1
 
         except urllib.error.HTTPError as e:
-            print(f"Varning: HTTP-fel {e.code} vid hämtning av {file_prefix}. Hoppar över.")
+            print(f"Varning: HTTP-fel {e.code} vid hämtning av {zone_dir}. Hoppar över.")
         except Exception as e:
-            print(f"Varning: Kunde inte bearbeta {file_prefix}: {e}")
+            print(f"Varning: Kunde inte bearbeta {zone_dir}: {e}")
 
-        time.sleep(0.4)  # Paus för att respektera ENTSO-E API rate limit
+        time.sleep(0.4)
 
     if success_count == 0:
         raise RuntimeError("Kunde inte hämta data för något enda elområde!")
 
-    print(f"Klart! Uppdaterade {success_count} av {len(ZONES)} filer.")
+    print(f"Klart! Uppdaterade {success_count} av {len(ZONES)} områden.")
 
 
 if __name__ == "__main__":
