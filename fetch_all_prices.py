@@ -7,6 +7,12 @@ import urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
+# --- HISTORISK HÄMTNING (Valfritt) ---
+# Lämna som None vid vanlig daglig körning via GitHub Actions.
+# Fyll i datum (ÅÅÅÅ-MM-DD) om du vill backfilla historik manuellt.
+CUSTOM_START_DATE = "2026-11-01" #None  # Ex: "2026-01-01"
+CUSTOM_END_DATE = "2026-11-16" #None  # Ex: "2026-01-31"
+
 # Konfiguration: Katalog/Område -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
 ZONES = {
     # Sverige (SEK)
@@ -172,82 +178,139 @@ def fetch_zone_prices(token: str, eic_code: str, target_currency: str, eur_rates
 
     return parse_entsoe_xml(xml_content, target_currency, eur_rates)
 
+def fetch_custom_period(
+    token: str,
+    eic_code: str,
+    target_currency: str,
+    eur_rates: dict[str, float],
+    period_start: datetime,
+    period_end: datetime,
+) -> list[dict]:
+  """Hämtar priser från ENTSO-E för ett valfritt tidsintervall."""
+  params = {
+      "documentType": "A44",
+      "in_Domain": eic_code,
+      "out_Domain": eic_code,
+      "periodStart": period_start.strftime("%Y%m%d%H%M"),
+      "periodEnd": period_end.strftime("%Y%m%d%H%M"),
+      "securityToken": token,
+  }
 
+  url = f"https://web-api.tp.entsoe.eu/api?{urllib.parse.urlencode(params)}"
+  req = urllib.request.Request(url, headers={"User-Agent": "EnergyPriceFetcher/1.0"})
+
+  with urllib.request.urlopen(req, timeout=60) as response:
+    xml_content = response.read().decode("utf-8")
+
+  return parse_entsoe_xml(xml_content, target_currency, eur_rates)
+    
 def main():
-    token = os.environ.get("ENTSOE_TOKEN")
-    if not token:
-        raise RuntimeError("Miljövariabeln ENTSOE_TOKEN saknas!")
+  token = os.environ.get("ENTSOE_TOKEN")
+  if not token:
+    raise RuntimeError("Miljövariabeln ENTSOE_TOKEN saknas!")
 
-    eur_rates = get_eur_exchange_rates()
-    now_utc = datetime.now(timezone.utc)
-    updated_at = now_utc.isoformat().replace("+00:00", "Z")
+  eur_rates = get_eur_exchange_rates()
+  now_utc = datetime.now(timezone.utc)
+  updated_at = now_utc.isoformat().replace("+00:00", "Z")
+
+  # Bestäm vilka datum som ska hämtas
+  if CUSTOM_START_DATE and CUSTOM_END_DATE:
+    start_date_obj = datetime.strptime(CUSTOM_START_DATE, "%Y-%m-%d").date()
+    end_date_obj = datetime.strptime(CUSTOM_END_DATE, "%Y-%m-%d").date()
+
+    # Bygg en lista med alla datum mellan start och slut (inklusive)
+    valid_dates = []
+    curr = start_date_obj
+    while curr <= end_date_obj:
+      valid_dates.append(curr)
+      curr += timedelta(days=1)
+
+    # Sätt API-anropets start och slut baserat på dina variabler
+    api_period_start = datetime.combine(
+        start_date_obj, datetime.min.time(), tzinfo=timezone.utc
+    )
+    api_period_end = datetime.combine(
+        end_date_obj + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc
+    )
+    print(
+        f"Kör historiskt läge från {CUSTOM_START_DATE} till"
+        f" {CUSTOM_END_DATE}..."
+    )
+  else:
     today_utc = now_utc.date()
-    valid_dates = {today_utc, today_utc + timedelta(days=1)}
+    valid_dates = [today_utc, today_utc + timedelta(days=1)]
+    api_period_start = now_utc.replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    api_period_end = (now_utc + timedelta(days=2)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
 
-    success_count = 0
+  success_count = 0
 
-    for zone_dir, (country_code, currency, eic_code) in ZONES.items():
-        print(f"Hämtar {zone_dir} ({country_code}, {currency})...")
+  for zone_dir, (country_code, currency, eic_code) in ZONES.items():
+    print(f"Hämtar {zone_dir} ({country_code}, {currency})...")
 
-        try:
-            prices = fetch_zone_prices(token, eic_code, currency, eur_rates)
-            if not prices:
-                print(f"Varning: Inga priser hittades för {zone_dir}.")
-                continue
+    try:
+      # Skicka med de dynamiska start- och slutdatumen till ENTSO-E-anropet
+      prices = fetch_custom_period(
+          token, eic_code, currency, eur_rates, api_period_start, api_period_end
+      )
+      if not prices:
+        print(f"Varning: Inga priser hittades för {zone_dir}.")
+        continue
 
-            # Gruppera intervallen per UTC-datum (YYYY-MM-DD)
-            prices_by_day: dict[datetime.date, list[dict]] = {}
-            for item in prices:
-                slot_utc = datetime.fromisoformat(item["start"].replace("Z", "+00:00"))
-                if slot_utc.date() in valid_dates:
-                    prices_by_day.setdefault(slot_utc.date(), []).append(item)
+      prices_by_day: dict[datetime.date, list[dict]] = {}
+      for item in prices:
+        slot_utc = datetime.fromisoformat(item["start"].replace("Z", "+00:00"))
+        if slot_utc.date() in valid_dates:
+          prices_by_day.setdefault(slot_utc.date(), []).append(item)
 
-            if not prices_by_day:
-                print(f"Varning: Inga giltiga dagpriser för {zone_dir}.")
-                continue
+      if not prices_by_day:
+        print(f"Varning: Inga giltiga dagpriser inom intervallet för {zone_dir}.")
+        continue
 
-            for day_date, day_prices in sorted(prices_by_day.items()):
-                year_str = day_date.strftime("%Y")
-                month_str = day_date.strftime("%m")
-                date_str = day_date.strftime("%Y-%m-%d")
+      for day_date, day_prices in sorted(prices_by_day.items()):
+        year_str = day_date.strftime("%Y")
+        month_str = day_date.strftime("%m")
+        date_str = day_date.strftime("%Y-%m-%d")
 
-                # Skapa katalogstruktur: OMRÅDE/ÅR/MÅNAD/ÅÅÅÅ-MM-DD.json
-                dir_path = os.path.join(zone_dir, year_str, month_str)
-                os.makedirs(dir_path, exist_ok=True)
-                output_file = os.path.join(dir_path, f"{date_str}.json")
+        dir_path = os.path.join(zone_dir, year_str, month_str)
+        os.makedirs(dir_path, exist_ok=True)
+        output_file = os.path.join(dir_path, f"{date_str}.json")
 
-                payload = {
-                    "zone": zone_dir,
-                    "country": country_code,
-                    "date": date_str,
-                    "timezone": "UTC",
-                    "currency": currency,
-                    "unit": "kWh",
-                    "exchange_rate_eur": eur_rates.get(currency, 1.0),
-                    "source": "ENTSO-E Transparency Platform",
-                    "updated_at": updated_at,
-                    "count": len(day_prices),
-                    "prices": day_prices,
-                }
+        payload = {
+            "zone": zone_dir,
+            "country": country_code,
+            "date": date_str,
+            "timezone": "UTC",
+            "currency": currency,
+            "unit": "kWh",
+            "exchange_rate_eur": eur_rates.get(currency, 1.0),
+            "source": "ENTSO-E Transparency Platform",
+            "updated_at": updated_at,
+            "count": len(day_prices),
+            "prices": day_prices,
+        }
 
-                with open(output_file, "w", encoding="utf-8") as f:
-                    json.dump(payload, f, indent=2, ensure_ascii=False)
+        with open(output_file, "w", encoding="utf-8") as f:
+          json.dump(payload, f, indent=2, ensure_ascii=False)
 
-                print(f"-> Sparade {len(day_prices)} intervall till {output_file}")
+        print(f"-> Sparade {len(day_prices)} intervall till {output_file}")
 
-            success_count += 1
+      success_count += 1
 
-        except urllib.error.HTTPError as e:
-            print(f"Varning: HTTP-fel {e.code} vid hämtning av {zone_dir}. Hoppar över.")
-        except Exception as e:
-            print(f"Varning: Kunde inte bearbeta {zone_dir}: {e}")
+    except urllib.error.HTTPError as e:
+      print(f"Varning: HTTP-fel {e.code} vid hämtning av {zone_dir}. Hoppar över.")
+    except Exception as e:
+      print(f"Varning: Kunde inte bearbeta {zone_dir}: {e}")
 
-        time.sleep(0.4)
+    time.sleep(0.4)
 
-    if success_count == 0:
-        raise RuntimeError("Kunde inte hämta data för något enda elområde!")
+  if success_count == 0:
+    raise RuntimeError("Kunde inte hämta data för något enda elområde!")
 
-    print(f"Klart! Uppdaterade {success_count} av {len(ZONES)} områden.")
+  print(f"Klart! Uppdaterade {success_count} av {len(ZONES)} områden.")
 
 
 if __name__ == "__main__":
