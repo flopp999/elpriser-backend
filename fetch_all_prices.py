@@ -10,8 +10,8 @@ from datetime import datetime, timedelta, timezone
 # --- HISTORISK HÄMTNING (Valfritt) ---
 # Lämna som None vid vanlig daglig körning via GitHub Actions.
 # Fyll i datum (ÅÅÅÅ-MM-DD) om du vill backfilla historik manuellt.
-CUSTOM_START_DATE = "2024-12-01" #None  # Ex: "2026-01-01"
-CUSTOM_END_DATE = "2026-11-01" #None  # Ex: "2026-01-31"
+CUSTOM_START_DATE = "2024-12-01"  # Ex: "2024-12-01"
+CUSTOM_END_DATE = "2026-01-01"    # Ex: "2026-01-01"
 
 # Konfiguration: Katalog/Område -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
 ZONES = {
@@ -154,13 +154,15 @@ def parse_entsoe_xml(xml_data: str, target_currency: str, eur_rates: dict[str, f
     return [unique_prices[k] for k in sorted(unique_prices.keys())]
 
 
-def fetch_zone_prices(token: str, eic_code: str, target_currency: str, eur_rates: dict[str, float]) -> list[dict]:
-    """Hämtar day-ahead-priser för ett elområde från ENTSO-E."""
-    now_utc = datetime.now(timezone.utc)
-    # Hämta från 00:00 UTC idag till 23:00 UTC imorgon
-    period_start = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
-    period_end = (now_utc + timedelta(days=2)).replace(hour=0, minute=0, second=0, microsecond=0)
-
+def fetch_custom_period(
+    token: str,
+    eic_code: str,
+    target_currency: str,
+    eur_rates: dict[str, float],
+    period_start: datetime,
+    period_end: datetime,
+) -> list[dict]:
+    """Hämtar priser från ENTSO-E för ett valfritt tidsintervall."""
     params = {
         "documentType": "A44",
         "in_Domain": eic_code,
@@ -173,144 +175,120 @@ def fetch_zone_prices(token: str, eic_code: str, target_currency: str, eur_rates
     url = f"https://web-api.tp.entsoe.eu/api?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={"User-Agent": "EnergyPriceFetcher/1.0"})
 
-    with urllib.request.urlopen(req, timeout=30) as response:
+    with urllib.request.urlopen(req, timeout=60) as response:
         xml_content = response.read().decode("utf-8")
 
     return parse_entsoe_xml(xml_content, target_currency, eur_rates)
 
-def fetch_custom_period(
-    token: str,
-    eic_code: str,
-    target_currency: str,
-    eur_rates: dict[str, float],
-    period_start: datetime,
-    period_end: datetime,
-) -> list[dict]:
-  """Hämtar priser från ENTSO-E för ett valfritt tidsintervall."""
-  params = {
-      "documentType": "A44",
-      "in_Domain": eic_code,
-      "out_Domain": eic_code,
-      "periodStart": period_start.strftime("%Y%m%d%H%M"),
-      "periodEnd": period_end.strftime("%Y%m%d%H%M"),
-      "securityToken": token,
-  }
 
-  url = f"https://web-api.tp.entsoe.eu/api?{urllib.parse.urlencode(params)}"
-  req = urllib.request.Request(url, headers={"User-Agent": "EnergyPriceFetcher/1.0"})
-
-  with urllib.request.urlopen(req, timeout=60) as response:
-    xml_content = response.read().decode("utf-8")
-
-  return parse_entsoe_xml(xml_content, target_currency, eur_rates)
-    
 def main():
-  token = os.environ.get("ENTSOE_TOKEN")
-  if not token:
-    raise RuntimeError("Miljövariabeln ENTSOE_TOKEN saknas!")
+    token = os.environ.get("ENTSOE_TOKEN")
+    if not token:
+        raise RuntimeError("Miljövariabeln ENTSOE_TOKEN saknas!")
 
-  eur_rates = get_eur_exchange_rates()
-  now_utc = datetime.now(timezone.utc)
-  updated_at = now_utc.isoformat().replace("+00:00", "Z")
+    eur_rates = get_eur_exchange_rates()
+    now_utc = datetime.now(timezone.utc)
+    updated_at = now_utc.isoformat().replace("+00:00", "Z")
 
-  # Bestäm vilka datum som ska hämtas
-  if CUSTOM_START_DATE and CUSTOM_END_DATE:
-    start_date_obj = datetime.strptime(CUSTOM_START_DATE, "%Y-%m-%d").date()
-    end_date_obj = datetime.strptime(CUSTOM_END_DATE, "%Y-%m-%d").date()
+    # Bestäm vilka datum som ska hämtas
+    if CUSTOM_START_DATE and CUSTOM_END_DATE:
+        start_date_obj = datetime.strptime(CUSTOM_START_DATE, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(CUSTOM_END_DATE, "%Y-%m-%d").date()
 
-    # Bygg en lista med alla datum mellan start och slut (inklusive)
-    valid_dates = []
-    curr = start_date_obj
-    while curr <= end_date_obj:
-      valid_dates.append(curr)
-      curr += timedelta(days=1)
+        valid_dates = []
+        curr = start_date_obj
+        while curr <= end_date_obj:
+            valid_dates.append(curr)
+            curr += timedelta(days=1)
 
-    # Sätt API-anropets start och slut baserat på dina variabler
-    api_period_start = datetime.combine(
-        start_date_obj, datetime.min.time(), tzinfo=timezone.utc
-    )
-    api_period_end = datetime.combine(
-        end_date_obj + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc
-    )
-    print(
-        f"Kör historiskt läge från {CUSTOM_START_DATE} till"
-        f" {CUSTOM_END_DATE}..."
-    )
-  else:
-    today_utc = now_utc.date()
-    valid_dates = [today_utc, today_utc + timedelta(days=1)]
-    api_period_start = now_utc.replace(
-        hour=0, minute=0, second=0, microsecond=0
-    )
-    api_period_end = (now_utc + timedelta(days=2)).replace(
-        hour=0, minute=0, second=0, microsecond=0
-    )
+        print(f"Kör historiskt läge från {CUSTOM_START_DATE} till {CUSTOM_END_DATE} (delas upp i 3-månadersblock)...")
+    else:
+        today_utc = now_utc.date()
+        valid_dates = [today_utc, today_utc + timedelta(days=1)]
+        start_date_obj = today_utc
+        end_date_obj = today_utc + timedelta(days=1)
 
-  success_count = 0
+    success_count = 0
 
-  for zone_dir, (country_code, currency, eic_code) in ZONES.items():
-    print(f"Hämtar {zone_dir} ({country_code}, {currency})...")
+    for zone_dir, (country_code, currency, eic_code) in ZONES.items():
+        print(f"\nHämtar {zone_dir} ({country_code}, {currency})...")
 
-    try:
-      # Skicka med de dynamiska start- och slutdatumen till ENTSO-E-anropet
-      prices = fetch_custom_period(
-          token, eic_code, currency, eur_rates, api_period_start, api_period_end
-      )
-      if not prices:
-        print(f"Varning: Inga priser hittades för {zone_dir}.")
-        continue
+        all_zone_prices = []
 
-      prices_by_day: dict[datetime.date, list[dict]] = {}
-      for item in prices:
-        slot_utc = datetime.fromisoformat(item["start"].replace("Z", "+00:00"))
-        if slot_utc.date() in valid_dates:
-          prices_by_day.setdefault(slot_utc.date(), []).append(item)
+        # Dela upp perioden i intervall om ca 90 dagar (3 månader) för att undvika HTTP 400
+        chunk_start_date = start_date_obj
+        while chunk_start_date <= end_date_obj:
+            chunk_end_date = min(chunk_start_date + timedelta(days=90), end_date_obj + timedelta(days=1))
 
-      if not prices_by_day:
-        print(f"Varning: Inga giltiga dagpriser inom intervallet för {zone_dir}.")
-        continue
+            chunk_api_start = datetime.combine(chunk_start_date, datetime.min.time(), tzinfo=timezone.utc)
+            chunk_api_end = datetime.combine(chunk_end_date, datetime.min.time(), tzinfo=timezone.utc)
 
-      for day_date, day_prices in sorted(prices_by_day.items()):
-        year_str = day_date.strftime("%Y")
-        month_str = day_date.strftime("%m")
-        date_str = day_date.strftime("%Y-%m-%d")
+            try:
+                print(f"  -> Hämtar block: {chunk_start_date} till {chunk_end_date}...")
+                prices = fetch_custom_period(
+                    token, eic_code, currency, eur_rates, chunk_api_start, chunk_api_end
+                )
+                if prices:
+                    all_zone_prices.extend(prices)
+            except urllib.error.HTTPError as e:
+                print(f"  Varning: HTTP-fel {e.code} för {zone_dir} i intervallet {chunk_start_date} -> {chunk_end_date}.")
+            except Exception as e:
+                print(f"  Varning: Kunde inte hämta block för {zone_dir}: {e}")
 
-        dir_path = os.path.join(zone_dir, year_str, month_str)
-        os.makedirs(dir_path, exist_ok=True)
-        output_file = os.path.join(dir_path, f"{date_str}.json")
+            # Flytta fram startdatumet 90 dagar för nästa block
+            chunk_start_date += timedelta(days=90)
+            time.sleep(0.3)
 
-        payload = {
-            "zone": zone_dir,
-            "country": country_code,
-            "date": date_str,
-            "timezone": "UTC",
-            "currency": currency,
-            "unit": "kWh",
-            "exchange_rate_eur": eur_rates.get(currency, 1.0),
-            "source": "ENTSO-E Transparency Platform",
-            "updated_at": updated_at,
-            "count": len(day_prices),
-            "prices": day_prices,
-        }
+        if not all_zone_prices:
+            print(f"Varning: Inga priser hittades överhuvudtaget för {zone_dir}.")
+            continue
 
-        with open(output_file, "w", encoding="utf-8") as f:
-          json.dump(payload, f, indent=2, ensure_ascii=False)
+        # Sortera och filtrera per dag för zonen
+        prices_by_day: dict[datetime.date, list[dict]] = {}
+        for item in all_zone_prices:
+            slot_utc = datetime.fromisoformat(item["start"].replace("Z", "+00:00"))
+            if slot_utc.date() in valid_dates:
+                prices_by_day.setdefault(slot_utc.date(), []).append(item)
 
-        print(f"-> Sparade {len(day_prices)} intervall till {output_file}")
+        if not prices_by_day:
+            print(f"Varning: Inga giltiga dagpriser inom det valda intervallet för {zone_dir}.")
+            continue
 
-      success_count += 1
+        # Spara filerna per dag för zonen
+        for day_date, day_prices in sorted(prices_by_day.items()):
+            year_str = day_date.strftime("%Y")
+            month_str = day_date.strftime("%m")
+            date_str = day_date.strftime("%Y-%m-%d")
 
-    except urllib.error.HTTPError as e:
-      print(f"Varning: HTTP-fel {e.code} vid hämtning av {zone_dir}. Hoppar över.")
-    except Exception as e:
-      print(f"Varning: Kunde inte bearbeta {zone_dir}: {e}")
+            dir_path = os.path.join(zone_dir, year_str, month_str)
+            os.makedirs(dir_path, exist_ok=True)
+            output_file = os.path.join(dir_path, f"{date_str}.json")
 
-    time.sleep(0.4)
+            payload = {
+                "zone": zone_dir,
+                "country": country_code,
+                "date": date_str,
+                "timezone": "UTC",
+                "currency": currency,
+                "unit": "kWh",
+                "exchange_rate_eur": eur_rates.get(currency, 1.0),
+                "source": "ENTSO-E Transparency Platform",
+                "updated_at": updated_at,
+                "count": len(day_prices),
+                "prices": day_prices,
+            }
 
-  if success_count == 0:
-    raise RuntimeError("Kunde inte hämta data för något enda elområde!")
+            with open(output_file, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2, ensure_ascii=False)
 
-  print(f"Klart! Uppdaterade {success_count} av {len(ZONES)} områden.")
+        print(f"-> Sparade {len(prices_by_day)} dagars filer för {zone_dir}.")
+        success_count += 1
+        time.sleep(0.4)
+
+    if success_count == 0:
+        raise RuntimeError("Kunde inte hämta data för något enda elområde!")
+
+    print(f"\nKlart! Uppdaterade {success_count} av {len(ZONES)} områden.")
 
 
 if __name__ == "__main__":
