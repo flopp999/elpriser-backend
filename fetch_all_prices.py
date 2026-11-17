@@ -10,8 +10,8 @@ from datetime import datetime, timedelta, timezone
 # --- HISTORISK HÄMTNING (Valfritt) ---
 # Lämna som None vid vanlig daglig körning via GitHub Actions.
 # Fyll i datum (ÅÅÅÅ-MM-DD) om du vill backfilla historik manuellt.
-CUSTOM_START_DATE = "2025-12-01" #None  # Ex: "2026-01-01"
-CUSTOM_END_DATE = "2026-01-01" #None  # Ex: "2026-01-31"
+CUSTOM_START_DATE = "2024-12-01" #None  # Ex: "2026-01-01"
+CUSTOM_END_DATE = "2026-11-01" #None  # Ex: "2026-01-31"
 
 # Konfiguration: Katalog/Område -> (Landskod, Lokal valuta, ENTSO-E EIC-kod)
 ZONES = {
