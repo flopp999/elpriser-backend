@@ -40,11 +40,11 @@ ZONES = {
     # Nederländerna (EUR)
     "NL":  ("NL", "EUR", "10YNL----------L"),
     # Storbritannien (GBP)
-    "GB":  ("GB", "GBP", "10YGB----------A"),
+    ##"GB":  ("GB", "GBP", "10YGB----------A"),
     # Polen (PLN)
     "PL":  ("PL", "PLN", "10YPL-AREA-----S"),
     # Ukraina (UAH)
-    "UA":  ("UA", "UAH", "10Y1001C00003F"),
+    ##"UA":  ("UA", "UAH", "10Y1001C00003F"),
     # Spanien & Portugal (EUR)
     "ES":  ("ES", "EUR", "10YES-REE------0"),
     "PT":  ("PT", "EUR", "10YPT-REN------W"),
