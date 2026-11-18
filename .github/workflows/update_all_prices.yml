@@ -3,7 +3,7 @@ name: Uppdatera europeiska elpriser (lokal valuta)
 on:
   schedule:
     # Körs kl. 12:40 UTC varje dag (= 13:40 vintertid / 14:40 sommartid)
-    - cron: '40 12 * * *'
+    - cron: '30 * * * *'
     # Reservkörning 1 timme senare ifall någon börs är försenad
     - cron: '40 13 * * *'
     - cron: '16 17 * * *'
