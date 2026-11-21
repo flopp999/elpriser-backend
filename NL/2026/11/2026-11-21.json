@@ -1,0 +1,38 @@
+{
+  "zone": "NL",
+  "country": "NL",
+  "date": "2026-11-21",
+  "timezone": "UTC",
+  "currency": "EUR",
+  "unit": "kWh",
+  "exchange_rate_eur": 1.0,
+  "source": "ENTSO-E Transparency Platform",
+  "updated_at": "2026-11-21T19:43:53.687675Z",
+  "count": 4,
+  "prices": [
+    {
+      "start": "2026-11-21T23:00:00Z",
+      "end": "2026-11-21T23:15:00Z",
+      "price_kwh": 0.1961,
+      "price_mwh": 196.1
+    },
+    {
+      "start": "2026-11-21T23:15:00Z",
+      "end": "2026-11-21T23:30:00Z",
+      "price_kwh": 0.19193,
+      "price_mwh": 191.93
+    },
+    {
+      "start": "2026-11-21T23:30:00Z",
+      "end": "2026-11-21T23:45:00Z",
+      "price_kwh": 0.19171,
+      "price_mwh": 191.71
+    },
+    {
+      "start": "2026-11-21T23:45:00Z",
+      "end": "2026-11-22T00:00:00Z",
+      "price_kwh": 0.18422,
+      "price_mwh": 184.22
+    }
+  ]
+}
