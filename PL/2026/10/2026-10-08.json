@@ -5,586 +5,586 @@
   "timezone": "UTC",
   "currency": "PLN",
   "unit": "kWh",
-  "exchange_rate_eur": 4.461739,
+  "exchange_rate_eur": 4.45031,
   "source": "ENTSO-E Transparency Platform",
-  "updated_at": "2026-11-24T00:23:56.739771Z",
+  "updated_at": "2026-11-24T01:12:31.881809Z",
   "count": 96,
   "prices": [
     {
       "start": "2026-10-08T00:00:00Z",
       "end": "2026-10-08T00:15:00Z",
-      "price_kwh": 0.51712,
-      "price_mwh": 517.12
+      "price_kwh": 0.51579,
+      "price_mwh": 515.79
     },
     {
       "start": "2026-10-08T00:15:00Z",
       "end": "2026-10-08T00:30:00Z",
-      "price_kwh": 0.50404,
-      "price_mwh": 504.04
+      "price_kwh": 0.50275,
+      "price_mwh": 502.75
     },
     {
       "start": "2026-10-08T00:30:00Z",
       "end": "2026-10-08T00:45:00Z",
-      "price_kwh": 0.51546,
-      "price_mwh": 515.46
+      "price_kwh": 0.51414,
+      "price_mwh": 514.14
     },
     {
       "start": "2026-10-08T00:45:00Z",
       "end": "2026-10-08T01:00:00Z",
-      "price_kwh": 0.52916,
-      "price_mwh": 529.16
+      "price_kwh": 0.52781,
+      "price_mwh": 527.81
     },
     {
       "start": "2026-10-08T01:00:00Z",
       "end": "2026-10-08T01:15:00Z",
-      "price_kwh": 0.53179,
-      "price_mwh": 531.79
+      "price_kwh": 0.53043,
+      "price_mwh": 530.43
     },
     {
       "start": "2026-10-08T01:15:00Z",
       "end": "2026-10-08T01:30:00Z",
-      "price_kwh": 0.52568,
-      "price_mwh": 525.68
-    },
-    {
-      "start": "2026-10-08T01:30:00Z",
-      "end": "2026-10-08T01:45:00Z",
-      "price_kwh": 0.51118,
-      "price_mwh": 511.18
-    },
-    {
-      "start": "2026-10-08T01:45:00Z",
-      "end": "2026-10-08T02:00:00Z",
-      "price_kwh": 0.52189,
-      "price_mwh": 521.89
-    },
-    {
-      "start": "2026-10-08T02:00:00Z",
-      "end": "2026-10-08T02:15:00Z",
-      "price_kwh": 0.53411,
-      "price_mwh": 534.11
-    },
-    {
-      "start": "2026-10-08T02:15:00Z",
-      "end": "2026-10-08T02:30:00Z",
-      "price_kwh": 0.52836,
-      "price_mwh": 528.36
-    },
-    {
-      "start": "2026-10-08T02:30:00Z",
-      "end": "2026-10-08T02:45:00Z",
-      "price_kwh": 0.52617,
-      "price_mwh": 526.17
-    },
-    {
-      "start": "2026-10-08T02:45:00Z",
-      "end": "2026-10-08T03:00:00Z",
-      "price_kwh": 0.52693,
-      "price_mwh": 526.93
-    },
-    {
-      "start": "2026-10-08T03:00:00Z",
-      "end": "2026-10-08T03:15:00Z",
-      "price_kwh": 0.52301,
-      "price_mwh": 523.01
-    },
-    {
-      "start": "2026-10-08T03:15:00Z",
-      "end": "2026-10-08T03:30:00Z",
-      "price_kwh": 0.53501,
-      "price_mwh": 535.01
-    },
-    {
-      "start": "2026-10-08T03:30:00Z",
-      "end": "2026-10-08T03:45:00Z",
       "price_kwh": 0.52434,
       "price_mwh": 524.34
     },
     {
+      "start": "2026-10-08T01:30:00Z",
+      "end": "2026-10-08T01:45:00Z",
+      "price_kwh": 0.50987,
+      "price_mwh": 509.87
+    },
+    {
+      "start": "2026-10-08T01:45:00Z",
+      "end": "2026-10-08T02:00:00Z",
+      "price_kwh": 0.52055,
+      "price_mwh": 520.55
+    },
+    {
+      "start": "2026-10-08T02:00:00Z",
+      "end": "2026-10-08T02:15:00Z",
+      "price_kwh": 0.53275,
+      "price_mwh": 532.75
+    },
+    {
+      "start": "2026-10-08T02:15:00Z",
+      "end": "2026-10-08T02:30:00Z",
+      "price_kwh": 0.52701,
+      "price_mwh": 527.01
+    },
+    {
+      "start": "2026-10-08T02:30:00Z",
+      "end": "2026-10-08T02:45:00Z",
+      "price_kwh": 0.52483,
+      "price_mwh": 524.83
+    },
+    {
+      "start": "2026-10-08T02:45:00Z",
+      "end": "2026-10-08T03:00:00Z",
+      "price_kwh": 0.52558,
+      "price_mwh": 525.58
+    },
+    {
+      "start": "2026-10-08T03:00:00Z",
+      "end": "2026-10-08T03:15:00Z",
+      "price_kwh": 0.52167,
+      "price_mwh": 521.67
+    },
+    {
+      "start": "2026-10-08T03:15:00Z",
+      "end": "2026-10-08T03:30:00Z",
+      "price_kwh": 0.53364,
+      "price_mwh": 533.64
+    },
+    {
+      "start": "2026-10-08T03:30:00Z",
+      "end": "2026-10-08T03:45:00Z",
+      "price_kwh": 0.523,
+      "price_mwh": 523.0
+    },
+    {
       "start": "2026-10-08T03:45:00Z",
       "end": "2026-10-08T04:00:00Z",
-      "price_kwh": 0.52889,
-      "price_mwh": 528.89
+      "price_kwh": 0.52754,
+      "price_mwh": 527.54
     },
     {
       "start": "2026-10-08T04:00:00Z",
       "end": "2026-10-08T04:15:00Z",
-      "price_kwh": 0.59252,
-      "price_mwh": 592.52
+      "price_kwh": 0.591,
+      "price_mwh": 591.0
     },
     {
       "start": "2026-10-08T04:15:00Z",
       "end": "2026-10-08T04:30:00Z",
-      "price_kwh": 0.73195,
-      "price_mwh": 731.95
+      "price_kwh": 0.73007,
+      "price_mwh": 730.07
     },
     {
       "start": "2026-10-08T04:30:00Z",
       "end": "2026-10-08T04:45:00Z",
-      "price_kwh": 0.77781,
-      "price_mwh": 777.81
+      "price_kwh": 0.77582,
+      "price_mwh": 775.82
     },
     {
       "start": "2026-10-08T04:45:00Z",
       "end": "2026-10-08T05:00:00Z",
-      "price_kwh": 0.85955,
-      "price_mwh": 859.55
+      "price_kwh": 0.85735,
+      "price_mwh": 857.35
     },
     {
       "start": "2026-10-08T05:00:00Z",
       "end": "2026-10-08T05:15:00Z",
-      "price_kwh": 0.81445,
-      "price_mwh": 814.45
+      "price_kwh": 0.81236,
+      "price_mwh": 812.36
     },
     {
       "start": "2026-10-08T05:15:00Z",
       "end": "2026-10-08T05:30:00Z",
-      "price_kwh": 0.8161,
-      "price_mwh": 816.1
+      "price_kwh": 0.81401,
+      "price_mwh": 814.01
     },
     {
       "start": "2026-10-08T05:30:00Z",
       "end": "2026-10-08T05:45:00Z",
-      "price_kwh": 0.79245,
-      "price_mwh": 792.45
+      "price_kwh": 0.79042,
+      "price_mwh": 790.42
     },
     {
       "start": "2026-10-08T05:45:00Z",
       "end": "2026-10-08T06:00:00Z",
-      "price_kwh": 0.7091,
-      "price_mwh": 709.1
+      "price_kwh": 0.70729,
+      "price_mwh": 707.29
     },
     {
       "start": "2026-10-08T06:00:00Z",
       "end": "2026-10-08T06:15:00Z",
-      "price_kwh": 0.90917,
-      "price_mwh": 909.17
+      "price_kwh": 0.90684,
+      "price_mwh": 906.84
     },
     {
       "start": "2026-10-08T06:15:00Z",
       "end": "2026-10-08T06:30:00Z",
-      "price_kwh": 0.62674,
-      "price_mwh": 626.74
+      "price_kwh": 0.62514,
+      "price_mwh": 625.14
     },
     {
       "start": "2026-10-08T06:30:00Z",
       "end": "2026-10-08T06:45:00Z",
-      "price_kwh": 0.49739,
-      "price_mwh": 497.39
+      "price_kwh": 0.49612,
+      "price_mwh": 496.12
     },
     {
       "start": "2026-10-08T06:45:00Z",
       "end": "2026-10-08T07:00:00Z",
-      "price_kwh": 0.47852,
-      "price_mwh": 478.52
+      "price_kwh": 0.4773,
+      "price_mwh": 477.3
     },
     {
       "start": "2026-10-08T07:00:00Z",
       "end": "2026-10-08T07:15:00Z",
-      "price_kwh": 0.47647,
-      "price_mwh": 476.47
+      "price_kwh": 0.47525,
+      "price_mwh": 475.25
     },
     {
       "start": "2026-10-08T07:15:00Z",
       "end": "2026-10-08T07:30:00Z",
-      "price_kwh": 0.47651,
-      "price_mwh": 476.51
+      "price_kwh": 0.47529,
+      "price_mwh": 475.29
     },
     {
       "start": "2026-10-08T07:30:00Z",
       "end": "2026-10-08T07:45:00Z",
-      "price_kwh": 0.45617,
-      "price_mwh": 456.17
+      "price_kwh": 0.455,
+      "price_mwh": 455.0
     },
     {
       "start": "2026-10-08T07:45:00Z",
       "end": "2026-10-08T08:00:00Z",
-      "price_kwh": 0.55049,
-      "price_mwh": 550.49
+      "price_kwh": 0.54908,
+      "price_mwh": 549.08
     },
     {
       "start": "2026-10-08T08:00:00Z",
       "end": "2026-10-08T08:15:00Z",
-      "price_kwh": 0.53304,
-      "price_mwh": 533.04
+      "price_kwh": 0.53168,
+      "price_mwh": 531.68
     },
     {
       "start": "2026-10-08T08:15:00Z",
       "end": "2026-10-08T08:30:00Z",
-      "price_kwh": 0.55941,
-      "price_mwh": 559.41
+      "price_kwh": 0.55798,
+      "price_mwh": 557.98
     },
     {
       "start": "2026-10-08T08:30:00Z",
       "end": "2026-10-08T08:45:00Z",
-      "price_kwh": 0.55384,
-      "price_mwh": 553.84
+      "price_kwh": 0.55242,
+      "price_mwh": 552.42
     },
     {
       "start": "2026-10-08T08:45:00Z",
       "end": "2026-10-08T09:00:00Z",
-      "price_kwh": 0.55384,
-      "price_mwh": 553.84
+      "price_kwh": 0.55242,
+      "price_mwh": 552.42
     },
     {
       "start": "2026-10-08T09:00:00Z",
       "end": "2026-10-08T09:15:00Z",
-      "price_kwh": 0.53345,
-      "price_mwh": 533.45
+      "price_kwh": 0.53208,
+      "price_mwh": 532.08
     },
     {
       "start": "2026-10-08T09:15:00Z",
       "end": "2026-10-08T09:30:00Z",
-      "price_kwh": 0.53367,
-      "price_mwh": 533.67
+      "price_kwh": 0.5323,
+      "price_mwh": 532.3
     },
     {
       "start": "2026-10-08T09:30:00Z",
       "end": "2026-10-08T09:45:00Z",
-      "price_kwh": 0.57017,
-      "price_mwh": 570.17
+      "price_kwh": 0.56871,
+      "price_mwh": 568.71
     },
     {
       "start": "2026-10-08T09:45:00Z",
       "end": "2026-10-08T10:00:00Z",
-      "price_kwh": 0.54161,
-      "price_mwh": 541.61
+      "price_kwh": 0.54022,
+      "price_mwh": 540.22
     },
     {
       "start": "2026-10-08T10:00:00Z",
       "end": "2026-10-08T10:15:00Z",
-      "price_kwh": 0.54366,
-      "price_mwh": 543.66
+      "price_kwh": 0.54227,
+      "price_mwh": 542.27
     },
     {
       "start": "2026-10-08T10:15:00Z",
       "end": "2026-10-08T10:30:00Z",
-      "price_kwh": 0.54161,
-      "price_mwh": 541.61
+      "price_kwh": 0.54022,
+      "price_mwh": 540.22
     },
     {
       "start": "2026-10-08T10:30:00Z",
       "end": "2026-10-08T10:45:00Z",
-      "price_kwh": 0.53349,
-      "price_mwh": 533.49
+      "price_kwh": 0.53212,
+      "price_mwh": 532.12
     },
     {
       "start": "2026-10-08T10:45:00Z",
       "end": "2026-10-08T11:00:00Z",
-      "price_kwh": 0.53755,
-      "price_mwh": 537.55
+      "price_kwh": 0.53617,
+      "price_mwh": 536.17
     },
     {
       "start": "2026-10-08T11:00:00Z",
       "end": "2026-10-08T11:15:00Z",
-      "price_kwh": 0.54366,
-      "price_mwh": 543.66
+      "price_kwh": 0.54227,
+      "price_mwh": 542.27
     },
     {
       "start": "2026-10-08T11:15:00Z",
       "end": "2026-10-08T11:30:00Z",
-      "price_kwh": 0.54161,
-      "price_mwh": 541.61
+      "price_kwh": 0.54022,
+      "price_mwh": 540.22
     },
     {
       "start": "2026-10-08T11:30:00Z",
       "end": "2026-10-08T11:45:00Z",
-      "price_kwh": 0.53755,
-      "price_mwh": 537.55
+      "price_kwh": 0.53617,
+      "price_mwh": 536.17
     },
     {
       "start": "2026-10-08T11:45:00Z",
       "end": "2026-10-08T12:00:00Z",
-      "price_kwh": 0.52126,
-      "price_mwh": 521.26
+      "price_kwh": 0.51993,
+      "price_mwh": 519.93
     },
     {
       "start": "2026-10-08T12:00:00Z",
       "end": "2026-10-08T12:15:00Z",
-      "price_kwh": 0.52738,
-      "price_mwh": 527.38
+      "price_kwh": 0.52603,
+      "price_mwh": 526.03
     },
     {
       "start": "2026-10-08T12:15:00Z",
       "end": "2026-10-08T12:30:00Z",
-      "price_kwh": 0.52872,
-      "price_mwh": 528.72
+      "price_kwh": 0.52736,
+      "price_mwh": 527.36
     },
     {
       "start": "2026-10-08T12:30:00Z",
       "end": "2026-10-08T12:45:00Z",
-      "price_kwh": 0.52649,
-      "price_mwh": 526.49
+      "price_kwh": 0.52514,
+      "price_mwh": 525.14
     },
     {
       "start": "2026-10-08T12:45:00Z",
       "end": "2026-10-08T13:00:00Z",
-      "price_kwh": 0.51529,
-      "price_mwh": 515.29
+      "price_kwh": 0.51397,
+      "price_mwh": 513.97
     },
     {
       "start": "2026-10-08T13:00:00Z",
       "end": "2026-10-08T13:15:00Z",
-      "price_kwh": 0.49338,
-      "price_mwh": 493.38
+      "price_kwh": 0.49212,
+      "price_mwh": 492.12
     },
     {
       "start": "2026-10-08T13:15:00Z",
       "end": "2026-10-08T13:30:00Z",
-      "price_kwh": 0.48263,
-      "price_mwh": 482.63
+      "price_kwh": 0.48139,
+      "price_mwh": 481.39
     },
     {
       "start": "2026-10-08T13:30:00Z",
       "end": "2026-10-08T13:45:00Z",
-      "price_kwh": 0.53987,
-      "price_mwh": 539.87
+      "price_kwh": 0.53849,
+      "price_mwh": 538.49
     },
     {
       "start": "2026-10-08T13:45:00Z",
       "end": "2026-10-08T14:00:00Z",
-      "price_kwh": 0.59952,
-      "price_mwh": 599.52
+      "price_kwh": 0.59799,
+      "price_mwh": 597.99
     },
     {
       "start": "2026-10-08T14:00:00Z",
       "end": "2026-10-08T14:15:00Z",
-      "price_kwh": 0.57436,
-      "price_mwh": 574.36
+      "price_kwh": 0.57289,
+      "price_mwh": 572.89
     },
     {
       "start": "2026-10-08T14:15:00Z",
       "end": "2026-10-08T14:30:00Z",
-      "price_kwh": 0.62281,
-      "price_mwh": 622.81
+      "price_kwh": 0.62122,
+      "price_mwh": 621.22
     },
     {
       "start": "2026-10-08T14:30:00Z",
       "end": "2026-10-08T14:45:00Z",
-      "price_kwh": 0.71687,
-      "price_mwh": 716.87
+      "price_kwh": 0.71503,
+      "price_mwh": 715.03
     },
     {
       "start": "2026-10-08T14:45:00Z",
       "end": "2026-10-08T15:00:00Z",
-      "price_kwh": 0.85964,
-      "price_mwh": 859.64
+      "price_kwh": 0.85744,
+      "price_mwh": 857.44
     },
     {
       "start": "2026-10-08T15:00:00Z",
       "end": "2026-10-08T15:15:00Z",
-      "price_kwh": 0.60675,
-      "price_mwh": 606.75
+      "price_kwh": 0.6052,
+      "price_mwh": 605.2
     },
     {
       "start": "2026-10-08T15:15:00Z",
       "end": "2026-10-08T15:30:00Z",
-      "price_kwh": 0.77402,
-      "price_mwh": 774.02
+      "price_kwh": 0.77204,
+      "price_mwh": 772.04
     },
     {
       "start": "2026-10-08T15:30:00Z",
       "end": "2026-10-08T15:45:00Z",
-      "price_kwh": 0.90703,
-      "price_mwh": 907.03
+      "price_kwh": 0.9047,
+      "price_mwh": 904.7
     },
     {
       "start": "2026-10-08T15:45:00Z",
       "end": "2026-10-08T16:00:00Z",
-      "price_kwh": 0.91015,
-      "price_mwh": 910.15
+      "price_kwh": 0.90782,
+      "price_mwh": 907.82
     },
     {
       "start": "2026-10-08T16:00:00Z",
       "end": "2026-10-08T16:15:00Z",
-      "price_kwh": 0.68604,
-      "price_mwh": 686.04
+      "price_kwh": 0.68428,
+      "price_mwh": 684.28
     },
     {
       "start": "2026-10-08T16:15:00Z",
       "end": "2026-10-08T16:30:00Z",
-      "price_kwh": 0.73668,
-      "price_mwh": 736.68
+      "price_kwh": 0.73479,
+      "price_mwh": 734.79
     },
     {
       "start": "2026-10-08T16:30:00Z",
       "end": "2026-10-08T16:45:00Z",
-      "price_kwh": 0.77558,
-      "price_mwh": 775.58
+      "price_kwh": 0.7736,
+      "price_mwh": 773.6
     },
     {
       "start": "2026-10-08T16:45:00Z",
       "end": "2026-10-08T17:00:00Z",
-      "price_kwh": 0.81378,
-      "price_mwh": 813.78
+      "price_kwh": 0.81169,
+      "price_mwh": 811.69
     },
     {
       "start": "2026-10-08T17:00:00Z",
       "end": "2026-10-08T17:15:00Z",
-      "price_kwh": 0.8152,
-      "price_mwh": 815.2
+      "price_kwh": 0.81312,
+      "price_mwh": 813.12
     },
     {
       "start": "2026-10-08T17:15:00Z",
       "end": "2026-10-08T17:30:00Z",
-      "price_kwh": 0.83626,
-      "price_mwh": 836.26
+      "price_kwh": 0.83412,
+      "price_mwh": 834.12
     },
     {
       "start": "2026-10-08T17:30:00Z",
       "end": "2026-10-08T17:45:00Z",
-      "price_kwh": 0.79896,
-      "price_mwh": 798.96
+      "price_kwh": 0.79692,
+      "price_mwh": 796.92
     },
     {
       "start": "2026-10-08T17:45:00Z",
       "end": "2026-10-08T18:00:00Z",
-      "price_kwh": 0.62955,
-      "price_mwh": 629.55
+      "price_kwh": 0.62794,
+      "price_mwh": 627.94
     },
     {
       "start": "2026-10-08T18:00:00Z",
       "end": "2026-10-08T18:15:00Z",
-      "price_kwh": 0.75854,
-      "price_mwh": 758.54
+      "price_kwh": 0.7566,
+      "price_mwh": 756.6
     },
     {
       "start": "2026-10-08T18:15:00Z",
       "end": "2026-10-08T18:30:00Z",
-      "price_kwh": 0.555,
-      "price_mwh": 555.0
+      "price_kwh": 0.55357,
+      "price_mwh": 553.57
     },
     {
       "start": "2026-10-08T18:30:00Z",
       "end": "2026-10-08T18:45:00Z",
-      "price_kwh": 0.5152,
-      "price_mwh": 515.2
+      "price_kwh": 0.51388,
+      "price_mwh": 513.88
     },
     {
       "start": "2026-10-08T18:45:00Z",
       "end": "2026-10-08T19:00:00Z",
-      "price_kwh": 0.48263,
-      "price_mwh": 482.63
+      "price_kwh": 0.48139,
+      "price_mwh": 481.39
     },
     {
       "start": "2026-10-08T19:00:00Z",
       "end": "2026-10-08T19:15:00Z",
-      "price_kwh": 0.47852,
-      "price_mwh": 478.52
+      "price_kwh": 0.4773,
+      "price_mwh": 477.3
     },
     {
       "start": "2026-10-08T19:15:00Z",
       "end": "2026-10-08T19:30:00Z",
-      "price_kwh": 0.48263,
-      "price_mwh": 482.63
+      "price_kwh": 0.48139,
+      "price_mwh": 481.39
     },
     {
       "start": "2026-10-08T19:30:00Z",
       "end": "2026-10-08T19:45:00Z",
-      "price_kwh": 0.49686,
-      "price_mwh": 496.86
+      "price_kwh": 0.49559,
+      "price_mwh": 495.59
     },
     {
       "start": "2026-10-08T19:45:00Z",
       "end": "2026-10-08T20:00:00Z",
-      "price_kwh": 0.52733,
-      "price_mwh": 527.33
+      "price_kwh": 0.52598,
+      "price_mwh": 525.98
     },
     {
       "start": "2026-10-08T20:00:00Z",
       "end": "2026-10-08T20:15:00Z",
-      "price_kwh": 0.52756,
-      "price_mwh": 527.56
+      "price_kwh": 0.5262,
+      "price_mwh": 526.2
     },
     {
       "start": "2026-10-08T20:15:00Z",
       "end": "2026-10-08T20:30:00Z",
-      "price_kwh": 0.55995,
-      "price_mwh": 559.95
+      "price_kwh": 0.55851,
+      "price_mwh": 558.51
     },
     {
       "start": "2026-10-08T20:30:00Z",
       "end": "2026-10-08T20:45:00Z",
-      "price_kwh": 0.55384,
-      "price_mwh": 553.84
+      "price_kwh": 0.55242,
+      "price_mwh": 552.42
     },
     {
       "start": "2026-10-08T20:45:00Z",
       "end": "2026-10-08T21:00:00Z",
-      "price_kwh": 0.53755,
-      "price_mwh": 537.55
+      "price_kwh": 0.53617,
+      "price_mwh": 536.17
     },
     {
       "start": "2026-10-08T21:00:00Z",
       "end": "2026-10-08T21:15:00Z",
-      "price_kwh": 0.54473,
-      "price_mwh": 544.73
+      "price_kwh": 0.54334,
+      "price_mwh": 543.34
     },
     {
       "start": "2026-10-08T21:15:00Z",
       "end": "2026-10-08T21:30:00Z",
-      "price_kwh": 0.49659,
-      "price_mwh": 496.59
+      "price_kwh": 0.49532,
+      "price_mwh": 495.32
     },
     {
       "start": "2026-10-08T21:30:00Z",
       "end": "2026-10-08T21:45:00Z",
-      "price_kwh": 0.45617,
-      "price_mwh": 456.17
+      "price_kwh": 0.455,
+      "price_mwh": 455.0
     },
     {
       "start": "2026-10-08T21:45:00Z",
       "end": "2026-10-08T22:00:00Z",
-      "price_kwh": 0.43185,
-      "price_mwh": 431.85
+      "price_kwh": 0.43075,
+      "price_mwh": 430.75
     },
     {
       "start": "2026-10-08T22:00:00Z",
       "end": "2026-10-08T22:15:00Z",
-      "price_kwh": 0.41405,
-      "price_mwh": 414.05
+      "price_kwh": 0.41299,
+      "price_mwh": 412.99
     },
     {
       "start": "2026-10-08T22:15:00Z",
       "end": "2026-10-08T22:30:00Z",
-      "price_kwh": 0.39576,
-      "price_mwh": 395.76
+      "price_kwh": 0.39474,
+      "price_mwh": 394.74
     },
     {
       "start": "2026-10-08T22:30:00Z",
       "end": "2026-10-08T22:45:00Z",
-      "price_kwh": 0.37992,
-      "price_mwh": 379.92
+      "price_kwh": 0.37894,
+      "price_mwh": 378.94
     },
     {
       "start": "2026-10-08T22:45:00Z",
       "end": "2026-10-08T23:00:00Z",
-      "price_kwh": 0.35859,
-      "price_mwh": 358.59
+      "price_kwh": 0.35767,
+      "price_mwh": 357.67
     },
     {
       "start": "2026-10-08T23:00:00Z",
       "end": "2026-10-08T23:15:00Z",
-      "price_kwh": 0.39268,
-      "price_mwh": 392.68
+      "price_kwh": 0.39167,
+      "price_mwh": 391.67
     },
     {
       "start": "2026-10-08T23:15:00Z",
       "end": "2026-10-08T23:30:00Z",
-      "price_kwh": 0.3763,
-      "price_mwh": 376.3
+      "price_kwh": 0.37534,
+      "price_mwh": 375.34
     },
     {
       "start": "2026-10-08T23:30:00Z",
       "end": "2026-10-08T23:45:00Z",
-      "price_kwh": 0.37099,
-      "price_mwh": 370.99
+      "price_kwh": 0.37004,
+      "price_mwh": 370.04
     },
     {
       "start": "2026-10-08T23:45:00Z",
       "end": "2026-10-09T00:00:00Z",
-      "price_kwh": 0.35386,
-      "price_mwh": 353.86
+      "price_kwh": 0.35295,
+      "price_mwh": 352.95
     }
   ]
 }
