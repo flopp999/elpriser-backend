@@ -7,7 +7,7 @@
   "unit": "kWh",
   "exchange_rate_eur": 1.0,
   "source": "ENTSO-E Transparency Platform",
-  "updated_at": "2026-11-27T13:40:12.960737Z",
+  "updated_at": "2026-11-27T19:39:18.000472Z",
   "count": 96,
   "prices": [
     {
@@ -565,26 +565,26 @@
     {
       "start": "2026-11-27T23:00:00Z",
       "end": "2026-11-27T23:15:00Z",
-      "price_kwh": 0.24366,
-      "price_mwh": 243.66
+      "price_kwh": 0.23376,
+      "price_mwh": 233.76
     },
     {
       "start": "2026-11-27T23:15:00Z",
       "end": "2026-11-27T23:30:00Z",
-      "price_kwh": 0.23775,
-      "price_mwh": 237.75
+      "price_kwh": 0.23025,
+      "price_mwh": 230.25
     },
     {
       "start": "2026-11-27T23:30:00Z",
       "end": "2026-11-27T23:45:00Z",
-      "price_kwh": 0.22382,
-      "price_mwh": 223.82
+      "price_kwh": 0.21083,
+      "price_mwh": 210.83
     },
     {
       "start": "2026-11-27T23:45:00Z",
       "end": "2026-11-28T00:00:00Z",
-      "price_kwh": 0.21655,
-      "price_mwh": 216.55
+      "price_kwh": 0.19445,
+      "price_mwh": 194.45
     }
   ]
 }
